@@ -21,8 +21,8 @@ window.ToDoList = {
         }).done(function (response) {
             console.log("Succesfully received response")
             console.log(response);
-        })
-        
+        }))
+
     }
 
 
