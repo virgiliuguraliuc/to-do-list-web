@@ -21,6 +21,7 @@ window.ToDoList = {
         ).done(function (response) {
             console.log("Succesfully received response");
             console.log(response);
+            ToDoList.getItems();
         })
 
     },
@@ -39,6 +40,19 @@ window.ToDoList = {
 
     },
 
+    deleteItem: function (ItemId) {
+        $.ajax({
+                url: ToDoList.API_BASE_URL + "?id=" + ItemId,
+                method: "DELETE"
+            }
+        ).done(function (response) {
+            ToDoList.getItems();
+        })
+
+
+    },
+
+
 //ctrl+shift+enter to fix my problems (formating)
     displatItems: function (items) {
         var tableBodyHtml = '';
@@ -55,8 +69,8 @@ window.ToDoList = {
         return `<tr>
              <td>${item.description}</td>
             <td> ${formatedDate}</td>
-            <td> <input type="checkbox" class="mark-done-checkbox" title="Compleated"/> </td>
-            <td> <a href="#" class="delete-item fa fa-trash" ></a> </td>
+            <td> <input type="checkbox" class="mark-done-checkbox" title="Compleated" data-id="${item.id}" /> </td>
+            <td> <a href="#" class="delete-item fa fa-trash" data-id="${item.id}" ></a> </td>
         </tr>`
     },
 
@@ -66,8 +80,19 @@ window.ToDoList = {
 
             ToDoList.createItem();
         });
+        // using delegate because the element a.delete-item is dynnamicaly injected after the page has loadead
+        $("#to-do-items-table").delegate('.delete-item','click',function (event) {
+            event.preventDefault();
+
+            var ItemId = $(this).data('id');
+
+            ToDoList.deleteItem(ItemId)
+        });
+
 
     },
+
+
 
 
 };
