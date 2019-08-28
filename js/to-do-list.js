@@ -52,6 +52,21 @@ window.ToDoList = {
 
     },
 
+    updateItem: function (ItemId, done) {
+        $.ajax({
+                url: ToDoList.API_BASE_URL + "?id=" + ItemId,
+                method: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    done: done
+                })
+            }
+        ).done(function (response) {
+            ToDoList.getItems();
+        })
+
+
+    },
 
 //ctrl+shift+enter to fix my problems (formating)
     displatItems: function (items) {
@@ -88,7 +103,14 @@ window.ToDoList = {
 
             ToDoList.deleteItem(ItemId)
         });
+        $("#to-do-items-table").delegate('.mark-done-checkbox','change',function (event) {
+            event.preventDefault();
 
+            var ItemId = $(this).data('id');
+            var checkBoxChecked = $(this).is("checked")
+
+            ToDoList.updateItem(ItemId, checkBoxChecked)
+        });
 
     },
 
