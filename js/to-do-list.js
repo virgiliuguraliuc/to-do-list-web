@@ -80,11 +80,13 @@ window.ToDoList = {
     getItemRow: function (item) {
         //spread syntax am transformat un array in parametrii adica cifrele despartite cu virgula se transforma in parametrii pt crearea de date
         var formatedDate = new Date(...item.deadline).toLocaleDateString("en-US");
+        var checkedAttribute = item.done ? "checked" : "";
+        //mai sus la checkedAttribute avem un ternary operator
 
         return `<tr>
              <td>${item.description}</td>
             <td> ${formatedDate}</td>
-            <td> <input type="checkbox" class="mark-done-checkbox" title="Compleated" data-id="${item.id}" /> </td>
+            <td> <input type="checkbox" class="mark-done-checkbox" title="Compleated" data-id="${item.id}" ${checkedAttribute}/></td>
             <td> <a href="#" class="delete-item fa fa-trash" data-id="${item.id}" ></a> </td>
         </tr>`
     },
@@ -103,11 +105,11 @@ window.ToDoList = {
 
             ToDoList.deleteItem(ItemId)
         });
-        $("#to-do-items-table").delegate('.mark-done-checkbox','change',function (event) {
+        $('#to-do-items-table').delegate('.mark-done-checkbox','change',function (event) {
             event.preventDefault();
 
             var ItemId = $(this).data('id');
-            var checkBoxChecked = $(this).is("checked")
+            var checkBoxChecked = $(this).is(":checked")
 
             ToDoList.updateItem(ItemId, checkBoxChecked)
         });
